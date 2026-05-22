@@ -11,3 +11,7 @@ Los escenarios mas reales a nivel productivo son: Leer replicas de informes, Mig
 ## 📘 Investigacion Blog nm_1
 
 Para visualizar todo el detalle de esta podemos ir a la documentacion detallada en el archivo de **[BLOG_1.md](https://github.com/htlgil41/bytepg/blob/main/BLOG_1.md)**
+
+## 📘 Investigacion Geminis chat_1
+
+Para visualizar todo el detalle de esta podemos ir a la documentacion detallada en el archivo de **[CHAT_1.md](https://github.com/htlgil41/bytepg/blob/main/CHAT_1.md)**
