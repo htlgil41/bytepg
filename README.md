@@ -15,3 +15,7 @@ Para visualizar todo el detalle de esta podemos ir a la documentacion detallada 
 ## 📘 Investigacion Geminis chat_1
 
 Para visualizar todo el detalle de esta podemos ir a la documentacion detallada en el archivo de **[CHAT_1.md](https://github.com/htlgil41/bytepg/blob/main/CHAT_1.md)**
+
+## 📘 Pasos de replica ejemplo de nodo primario Bogota 
+
+Aca hay documentacion poco mas explicita osea menos explicacion y probablemente mas codigo **[REPLICA_1.md](https://github.com/htlgil41/bytepg/blob/main/REPLICA_1.md)**
