@@ -151,6 +151,9 @@ wal_level = logical
 # 'FIRST 1' significa que el primero de la lista que responda bloquea el commit exitoso.
 synchronous_commit = on
 synchronous_standby_names = 'FIRST 1 (replica_nube)'
+
+# CRUCIAL: Bloquea los slots lógicos para que no avancen más allá de este slot físico
+synchronized_standby_slots = 'slot_fisico_nube'
 ```
 
 En el servidor de respaldo (nube). Cuando configures la réplica física (usando la herramienta nativa pg_basebackup), asegúrate de que el parámetro de conexión identifique al servidor con el nombre exacto que pusiste en Bogotá: `pg_basebackup -h IP_BOGOTA -D /var/lib/postgresql/data -U replicador -P -R --application-name=replica_nube
