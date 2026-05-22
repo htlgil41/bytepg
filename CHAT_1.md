@@ -226,7 +226,51 @@ El Slot Físico para la Nube. (Este se crea tras bambalinas o con pg_create_phys
 
 El Slot Lógico para Medellín. (El comando que seleccionaste). Este slot le dice a Bogotá: "Mantén un traductor SQL abierto para la base de datos de Medellín".
 
+**`(Peronalmente a este punto creo que esta Doc es quizas entendible unicamente para mi "Lo siento")`**
+
 # 🧩Vamos con todo el paso
-**(Peronalmente a este punto creo que esta Doc es quizas entendible unicamente para mi "Lo siento")**
 
 📍**Paso 1 Configurar el servidor principal**
+
+Este servidor es el que manda al principio. Debe estar preparado para enviar datos binarios (a la Nube) y datos traducidos (a Medellín) al mismo tiempo.
+
+```
+# Cambiar el nivel de historial a lógico (sirve para físico y lógico a la vez)
+wal_level = logical
+
+# Activar la replicación síncrona obligatoria para la Nube
+synchronous_commit = on
+synchronous_standby_names = 'FIRST 1 (replica_nube)'
+
+# Permitir que los slots lógicos se puedan copiar físicamente a la nube (Esta regla es concepto de investigacion)
+replication_slots_development_mode = true # (Nota: En PG17+ esto habilita el failover de slots)
+```
+
+Creamos los Slots y publiaciones en el primario:
+```
+-- 1. Creamos la tabla real de nuestro negocio
+CREATE TABLE productos (id SERIAL PRIMARY KEY, nombre TEXT, precio NUMERIC);
+
+-- 2. Creamos la PUBLICACIÓN lógica para las sucursales
+CREATE PUBLICATION pub_bogota FOR TABLE productos;
+
+-- 3. Creamos el SLOT LÓGICO para Medellín con la etiqueta 'failover = true'
+SELECT pg_create_logical_replication_slot(
+    'slot_medellin', 
+    'pgoutput', 
+    false, 
+    true -- <-- Aquí le ordenamos empacarse en el viaje físico hacia la nube
+);
+
+-- 4. Creamos el SLOT FÍSICO que usará la Nube para no perderse ningún byte
+SELECT pg_create_physical_replication_slot('slot_fisico_nube');
+```
+
+Ahora vamos a configurar l respaldo (Alternativa como primario)
+
+Este servidor empieza completamente vacío porque clonará el disco duro de Bogotá byte a byte. No tienes que crear tablas ni bases de datos aquí; Postgres lo hará por ti.
+
+-  **Clonar el servidor de Bogotá por primera vez (Línea de comandos)**:Con el servidor del puerto 5433 apagado, ejecuta este comando en tu terminal para traer una copia idéntica del disco duro de Bogotá: `pg_basebackup -h 127.0.0.1 -p 5432 -U postgres -D /ruta/de/tu/carpeta_puerto_5433 -Fp -Xs -P -R --slot=slot_fisico_nube --application-name=replica_nube
+` (Para mas informacion de `pg_basebackup` se documentara)
+
+Ahora vamos con las replicas logicas que basicamente seria el mismo proceso e incluso los paso en **[CHAT_1.md](https://github.com/htlgil41/bytepg/blob/main/CHAT_1.md)**
