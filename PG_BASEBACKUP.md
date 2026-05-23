@@ -1,4 +1,4 @@
-# 🐘pg_basebackup🐘
+# 🐘pg_basebackup replica fisica🐘
 
 pg_basebackup es una utilidad nativa de línea de comandos de PostgreSQL diseñada para crear copias de seguridad físicas (binarias) de todo un clúster de bases de datos en ejecución. Se utiliza principalmente para la recuperación ante desastres o para configurar servidores de réplica (streaming replication).
 
